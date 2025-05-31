@@ -1,4 +1,4 @@
 package org.example.dao;
 
-public interface GenericDao {
+public interface GenericDao<T> {
 }
