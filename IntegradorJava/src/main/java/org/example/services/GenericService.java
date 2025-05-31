@@ -1,4 +1,4 @@
 package org.example.services;
 
-public interface GenericService {
+public interface GenericService <T>{
 }
