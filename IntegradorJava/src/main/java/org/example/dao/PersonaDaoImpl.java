@@ -21,6 +21,8 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
             stmn.setLong(4, entity.getDomicilio().getId());
             stmn.executeUpdate();
             System.out.println("Persona guardada");
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -32,6 +34,8 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
             stmn.setLong(1, id);
             stmn.executeUpdate();
             System.out.println("Persona eliminada");
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -47,11 +51,13 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
             stmn.setLong(5, entity.getId());
             stmn.executeUpdate();
             System.out.println("Persona actualizada");
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public Persona buscar(Long id) throws SQLException {
+    public Persona buscarPorId(Long id) throws SQLException {
 
         String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id WHERE persona.id = ?";
         try(Connection conn = DatabaseConnection.getConnection();
@@ -75,6 +81,8 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
                         domicilio
                 );
             }
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -85,7 +93,7 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
         List<Persona> personas = new ArrayList<>();
         String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id";
         try(Connection conn = DatabaseConnection.getConnection();
-            Statement stmn = conn.createStatement();
+            PreparedStatement stmn = conn.prepareStatement(query);
             ResultSet rs = stmn.executeQuery(query)) {
 
             while (rs.next()) {
@@ -105,6 +113,8 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
                 personas.add(persona);
             }
 
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
         return personas;
     }

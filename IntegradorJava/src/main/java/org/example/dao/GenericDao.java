@@ -13,7 +13,7 @@ public interface GenericDao<T> {
 
     void eliminar(Long id)throws SQLException;
     void actualizar(T entity)throws SQLException;
-    T buscar(Long id)throws SQLException;
+    T buscarPorId(Long id)throws SQLException;
     List<T> buscarTodos()throws SQLException;
 
 }
