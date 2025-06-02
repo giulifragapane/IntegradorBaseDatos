@@ -1,4 +1,126 @@
 package org.example.dao;
 
-public class PersonaDaoImpl {
+import org.example.models.Domicilio;
+import org.example.models.Persona;
+import org.example.config.DatabaseConnection;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PersonaDaoImpl implements GenericDao<Persona> {
+
+    @Override
+    public void guardar(Persona entity) throws SQLException {
+        String query = "INSERT INTO persona (nombre, apellido, dni, fk_id_domicilio) VALUES (?, ?, ?, ?)";
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmn = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmn.setString(1, entity.getNombre());
+            stmn.setString(2, entity.getApellido());
+            stmn.setInt(3, Integer.parseInt(entity.getDni()));
+            stmn.setInt(4, Math.toIntExact(entity.getDomicilio().getId()));
+            stmn.executeUpdate();
+            System.out.println("Persona guardada");
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void eliminar(Long id) throws SQLException {
+        String query = "DELETE FROM persona WHERE id = ?";
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmn = conn.prepareStatement(query)) {
+            stmn.setLong(1, id);
+            stmn.executeUpdate();
+            System.out.println("Persona eliminada");
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void actualizar(Persona entity) throws SQLException {
+        String query = "UPDATE persona SET nombre = ?, apellido = ?, dni = ?, fr_key_domicilio = ? WHERE id = ?";
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmn = conn.prepareStatement(query)) {
+            stmn.setString(1, entity.getNombre());
+            stmn.setString(2, entity.getApellido());
+            stmn.setInt(3, Integer.parseInt(entity.getDni()));
+            stmn.setLong(4, entity.getDomicilio().getId());
+            stmn.setLong(5, entity.getId());
+            stmn.executeUpdate();
+            System.out.println("Persona actualizada");
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Persona buscarPorId(Long id) throws SQLException {
+
+        String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id WHERE persona.id = ?";
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmn = conn.prepareStatement(query)) {
+            stmn.setLong(1, id);
+            ResultSet rs = stmn.executeQuery();
+            if (rs.next()) {
+                Domicilio domicilio = new Domicilio(
+                        //rs.getLong("d.id"),
+                        rs.getString("d.calle"),
+                        rs.getInt("d.numero"),
+                        rs.getString("d.localidad"),
+                        rs.getString("d.provincia")
+
+                );
+                return new Persona(
+                        //rs.getLong("id"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido"),
+                        rs.getString("dni"),
+                        domicilio
+                );
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Persona> buscarTodos() throws SQLException {
+        List<Persona> personas = new ArrayList<>();
+        String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id";
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmn = conn.prepareStatement(query);
+            ResultSet rs = stmn.executeQuery(query)) {
+
+            while (rs.next()) {
+                Persona persona = new Persona(
+                        //rs.getLong("id"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido"),
+                        rs.getString("dni"),
+                        new Domicilio(
+                                //rs.getLong("d.id"),
+                                rs.getString("d.calle"),
+                                rs.getInt("d.numero"),
+                                rs.getString("d.localidad"),
+                                rs.getString("d.provincia")
+                        )
+                );
+                personas.add(persona);
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return personas;
+    }
 }
+
+
+
+
+

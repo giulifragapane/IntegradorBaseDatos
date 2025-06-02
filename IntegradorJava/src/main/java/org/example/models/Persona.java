@@ -1,23 +1,41 @@
 package org.example.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
-
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
-@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
 public class Persona {
-    private int id;
-    private String nombre, apellido, email, telefono;
-    private Date fechaNacimiento;
+    private Long id;
+    private String nombre;
+    private String apellido;
+    private String dni;
     private Domicilio domicilio;
 
 
+    public Persona(String nombre, String apellido, String dni, Domicilio domicilio) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.domicilio = domicilio;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setDomicilio(Domicilio domicilio) {
+        this.domicilio = domicilio;
+    }
 }
