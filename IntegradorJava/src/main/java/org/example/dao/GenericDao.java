@@ -10,7 +10,6 @@ public interface GenericDao<T> {
 
 
     void guardar(T entity) throws SQLException;
-
     void eliminar(Long id)throws SQLException;
     void actualizar(T entity)throws SQLException;
     T buscarPorId(Long id)throws SQLException;
