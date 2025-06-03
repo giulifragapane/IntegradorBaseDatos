@@ -12,13 +12,14 @@ import org.example.services.GenericService;
 import org.example.services.PersonaServiceImpl;
 
 import java.util.List;
+import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 @Builder
 public class Main {
     public static void main(String[] args) {
-
+        Scanner sc = new Scanner(System.in);
         System.out.println("Iniciando...");
 
         GenericDao<Domicilio> domicilioDao = new DomicilioDaoImpl();
@@ -29,6 +30,7 @@ public class Main {
         GenericService<Persona> personaService = new PersonaServiceImpl(personaDao, domicilioService);
 
         try {
+            int opcion;
             //instanciamos un domicilio
             System.out.println("Creando domicilio...");
             Domicilio dom1 = Domicilio.builder()
@@ -47,6 +49,14 @@ public class Main {
                     .domicilio(dom1)
                     .build();
             personaService.guardar(p1);
+            //condicional para decidir si continuar en la ejecucion
+            System.out.println("A continuacion se crearán otra persona y domicilio...\nSi deseas continuar presiona 1");
+            opcion=sc.nextInt();
+            sc.nextLine();
+            if (opcion!=1){
+                System.out.println("Saliendo...");
+                System.exit(0);
+            }
 
             //instanciamos un domicilio
             System.out.println("Creando domicilio...");
@@ -67,6 +77,13 @@ public class Main {
                     .domicilio(dom2)
                     .build();
             personaService.guardar(p2);
+            System.out.println("A continuacion se listarán las personas guardadas...\nSi deseas continuar presiona 1");
+            opcion=sc.nextInt();
+            sc.nextLine();
+            if (opcion!=1){
+                System.out.println("Saliendo...");
+                System.exit(0);
+            }
 
             //listando las personas instanciadas
             System.out.println("Listando a las personas...");
@@ -75,23 +92,58 @@ public class Main {
                 System.out.println(" * " + p);
             }
             System.out.println("\n------------------------------------------------------------");
-
+            System.out.println("A continuacion se buscará una persona con un id especifico...\nSi deseas continuar presiona 1");
+            opcion=sc.nextInt();
+            sc.nextLine();
+            if (opcion!=1){
+                System.out.println("Saliendo...");
+                System.exit(0);
+            }
             //Buscamos a una persona mediante el ID
-            System.out.println("Buscamos una persona con id 2:");
-            System.out.println(personaService.buscarPorId(2L));
+            System.out.println("Ingrese el numero de id a buscar...");
+            Long id = sc.nextLong();
+            System.out.println("Buscamos una persona con id "+id +":");
+            System.out.println(personaService.buscarPorId(id));
 
+            System.out.println("A continuacion se eliminará una persona por su id...\nSi deseas continuar presiona 1");
+            opcion=sc.nextInt();
+            sc.nextLine();
+            if (opcion!=1){
+                System.out.println("Saliendo...");
+                System.exit(0);
+            }
             //Eliminamos a una persona por ID
+            System.out.println("Ingrese el numero de id a eliminar...");
+            id = sc.nextLong();
             System.out.println("Eliminando la persona seleccionada...");
-           personaService.eliminar(2L);
+            personaService.eliminar(id);
 
             //Actualizamos una persona
-            System.out.println("Actualizamos a la persona con id 1, cambiando su apellido.");
-            p1.setApellido("Martinez");
-            personaService.actualizar(p1);
+            System.out.println("A continuacion se actualizará una persona...\nSi deseas continuar presiona 1");
+            opcion=sc.nextInt();
+            sc.nextLine();
+            if (opcion!=1){
+                System.out.println("Saliendo...");
+                System.exit(0);
+            }
+            System.out.println("Ingrese el numero de id a actualizar...");
+            id = sc.nextLong();
+            System.out.println("Actualizamos a la persona con id "+id+", cambiando su apellido.");
+            Persona persona= personaService.buscarPorId(id);
+            System.out.println("Ingrese el apellido:");
+            String apellido = sc.nextLine();
+            personaService.actualizar(persona);
 
             System.out.println("\n------------------------------------------------------------");
 
             //Volvemos a listar personas
+            System.out.println("A continuacion se volverán a listar las personas tras los cambios generados...\nSi deseas continuar presiona 1");
+            opcion=sc.nextInt();
+            sc.nextLine();
+            if (opcion!=1){
+                System.out.println("Saliendo...");
+                System.exit(0);
+            }
             System.out.println(" Listado de personas actualizado...");
             List<Persona> personasActualizado = personaService.buscarTodos();
             for (Persona p : personasActualizado) {
