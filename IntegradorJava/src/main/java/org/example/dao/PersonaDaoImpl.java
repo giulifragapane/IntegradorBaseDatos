@@ -15,7 +15,7 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
 
         String query = "INSERT INTO persona (nombre, apellido, dni, fr_key_domicilio) VALUES (?, ?, ?, ?)";
         try(Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
+            PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, persona.getNombre());
             stmt.setString(2, persona.getApellido());
             stmt.setInt(3, Integer.parseInt(persona.getDni()));
@@ -94,7 +94,7 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
         if (id<=0){
             throw new IllegalArgumentException("El ID de la persona debe ser mayor que cero.");
         }
-        String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id WHERE persona.id = ?";
+        String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id WHERE p.id = ?";
         try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setLong(1, id);
