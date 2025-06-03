@@ -94,22 +94,22 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
         if (id<=0){
             throw new IllegalArgumentException("El ID de la persona debe ser mayor que cero.");
         }
-        String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id WHERE p.id = ?";
+        String query = "SELECT p.id AS persona_id,p.nombre,p.apellido,p.dni, d.id AS domicilio_id, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id WHERE p.id = ?";
         try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Domicilio domicilio = new Domicilio(
-                        rs.getLong("d.id"),
-                        rs.getString("d.calle"),
-                        rs.getInt("d.numero"),
-                        rs.getString("d.localidad"),
-                        rs.getString("d.provincia")
+                        rs.getLong("domicilio_id"),
+                        rs.getString("calle"),
+                        rs.getInt("numero"),
+                        rs.getString("localidad"),
+                        rs.getString("provincia")
 
                 );
                 return new Persona(
-                        rs.getLong("id"),
+                        rs.getLong("persona_id"),
                         rs.getString("nombre"),
                         rs.getString("apellido"),
                         rs.getString("dni"),
@@ -128,23 +128,23 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
     @Override
     public List<Persona> buscarTodos() throws SQLException {
         List<Persona> personas = new ArrayList<>();
-        String query = "SELECT p.*, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id";
+        String query = "SELECT p.id AS persona_id, p.nombre, p.apellido, p.dni, d.id AS domicilio_id, d.calle, d.numero, d.localidad, d.provincia FROM persona p JOIN domicilio d ON p.fr_key_domicilio = d.id";
         try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 Persona persona = new Persona(
-                        rs.getLong("id"),
+                        rs.getLong("persona_id"),
                         rs.getString("nombre"),
                         rs.getString("apellido"),
                         rs.getString("dni"),
                         new Domicilio(
-                                rs.getLong("d.id"),
-                                rs.getString("d.calle"),
-                                rs.getInt("d.numero"),
-                                rs.getString("d.localidad"),
-                                rs.getString("d.provincia")
+                                rs.getLong("domicilio_id"),
+                                rs.getString("calle"),
+                                rs.getInt("numero"),
+                                rs.getString("localidad"),
+                                rs.getString("provincia")
                         )
                 );
                 personas.add(persona);

@@ -82,12 +82,12 @@ public class Main {
 
             //Eliminamos a una persona por ID
             System.out.println("Eliminando la persona seleccionada...");
-           personaService.eliminar(4L);
+           personaService.eliminar(2L);
 
             //Actualizamos una persona
-            System.out.println("Actualizamos a la persona con id 2, cambiando su apellido.");
-            p2.setApellido("Martinez");
-            personaService.actualizar(p2);
+            System.out.println("Actualizamos a la persona con id 1, cambiando su apellido.");
+            p1.setApellido("Martinez");
+            personaService.actualizar(p1);
 
             System.out.println("\n------------------------------------------------------------");
 
