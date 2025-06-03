@@ -77,6 +77,7 @@ public class Main {
                     .domicilio(dom2)
                     .build();
             personaService.guardar(p2);
+            System.out.println("\n------------------------------------------------------------");
             System.out.println("A continuacion se listarán las personas guardadas...\nSi deseas continuar presiona 1");
             opcion=sc.nextInt();
             sc.nextLine();
@@ -104,7 +105,7 @@ public class Main {
             Long id = sc.nextLong();
             System.out.println("Buscamos una persona con id "+id +":");
             System.out.println(personaService.buscarPorId(id));
-
+            System.out.println("\n------------------------------------------------------------");
             System.out.println("A continuacion se eliminará una persona por su id...\nSi deseas continuar presiona 1");
             opcion=sc.nextInt();
             sc.nextLine();
@@ -117,7 +118,7 @@ public class Main {
             id = sc.nextLong();
             System.out.println("Eliminando la persona seleccionada...");
             personaService.eliminar(id);
-
+            System.out.println("\n------------------------------------------------------------");
             //Actualizamos una persona
             System.out.println("A continuacion se actualizará una persona...\nSi deseas continuar presiona 1");
             opcion=sc.nextInt();
@@ -130,8 +131,7 @@ public class Main {
             id = sc.nextLong();
             System.out.println("Actualizamos a la persona con id "+id+", cambiando su apellido.");
             Persona persona= personaService.buscarPorId(id);
-            System.out.println("Ingrese el apellido:");
-            String apellido = sc.nextLine();
+            persona.setApellido("Gonzalez");
             personaService.actualizar(persona);
 
             System.out.println("\n------------------------------------------------------------");
