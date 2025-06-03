@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-06-2025 a las 18:56:36
+-- Tiempo de generación: 03-06-2025 a las 20:16:38
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,14 +35,6 @@ CREATE TABLE `domicilio` (
   `provincia` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `domicilio`
---
-
-INSERT INTO `domicilio` (`id`, `calle`, `numero`, `localidad`, `provincia`) VALUES
-(1, 'San Martin', 2301, 'CABA', 'Buenos Aires'),
-(2, 'Belgrano', 7001, 'Ciudad', 'Mendoza');
-
 -- --------------------------------------------------------
 
 --
@@ -56,13 +48,6 @@ CREATE TABLE `persona` (
   `dni` varchar(50) DEFAULT NULL,
   `fr_key_domicilio` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `persona`
---
-
-INSERT INTO `persona` (`id`, `nombre`, `apellido`, `dni`, `fr_key_domicilio`) VALUES
-(1, 'Juan', 'Martinez', '44956224', 1);
 
 --
 -- Índices para tablas volcadas
@@ -89,13 +74,13 @@ ALTER TABLE `persona`
 -- AUTO_INCREMENT de la tabla `domicilio`
 --
 ALTER TABLE `domicilio`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
