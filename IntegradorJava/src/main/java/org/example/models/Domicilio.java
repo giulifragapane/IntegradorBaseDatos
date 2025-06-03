@@ -1,10 +1,16 @@
 package org.example.models;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+//import org.example.services.DomicilioService;
+import org.example.services.DomicilioServiceImpl;
 
 @Getter
 @ToString
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 public class Domicilio {
 
 
@@ -13,6 +19,8 @@ public class Domicilio {
     private int numero;
     private String localidad;
     private String provincia;
+
+    private DomicilioServiceImpl domicilioService = new DomicilioServiceImpl();
 
     public Domicilio(String calle, int numero, String localidad, String provincia) {
         this.calle = calle;
@@ -35,6 +43,10 @@ public class Domicilio {
 
     public void setProvincia(String provincia) {
         this.provincia = provincia;
+    }
+
+    public void guardar(Domicilio domicilio) throws Exception{
+        domicilioService.guardar(domicilio);
     }
 
 

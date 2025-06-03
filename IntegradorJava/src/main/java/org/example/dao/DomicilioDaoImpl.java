@@ -11,13 +11,20 @@ public class DomicilioDaoImpl implements GenericDao<Domicilio> {
     public void guardar(Domicilio entity) throws SQLException {
         String query = "INSERT INTO domicilio (calle, numero, localidad, provincia) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmn = conn.prepareStatement(query)) {
+             PreparedStatement stmn = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmn.setString(1, entity.getCalle());
             stmn.setInt(2, entity.getNumero());
             stmn.setString(3, entity.getLocalidad());
             stmn.setString(4, entity.getProvincia());
             stmn.executeUpdate();
+
+            try (ResultSet rs = stmn.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));  // Aquí asignás el ID generado
+                }
+            }
             System.out.println("Domicilio guardado");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,7 +81,7 @@ public class DomicilioDaoImpl implements GenericDao<Domicilio> {
                 );
 
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -86,7 +93,7 @@ public class DomicilioDaoImpl implements GenericDao<Domicilio> {
         String query = "SELECT * FROM domicilio";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmn = conn.prepareStatement(query);
-             ResultSet rs = stmn.executeQuery(query)){
+             ResultSet rs = stmn.executeQuery(query)) {
             while (rs.next()) {
                 Domicilio domicilio = new Domicilio(
                         //rs.getLong("id"),
@@ -97,11 +104,9 @@ public class DomicilioDaoImpl implements GenericDao<Domicilio> {
                 );
                 domicilios.add(domicilio);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return domicilios;
     }
 }
-

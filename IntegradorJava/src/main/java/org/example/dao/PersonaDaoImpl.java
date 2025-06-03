@@ -12,13 +12,13 @@ public class PersonaDaoImpl implements GenericDao<Persona> {
 
     @Override
     public void guardar(Persona entity) throws SQLException {
-        String query = "INSERT INTO persona (nombre, apellido, dni, fr_key_domicilio) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO persona (nombre, apellido, dni, fk_id_domicilio) VALUES (?, ?, ?, ?)";
         try(Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmn = conn.prepareStatement(query)) {
+            PreparedStatement stmn = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmn.setString(1, entity.getNombre());
             stmn.setString(2, entity.getApellido());
             stmn.setInt(3, Integer.parseInt(entity.getDni()));
-            stmn.setLong(4, entity.getDomicilio().getId());
+            stmn.setInt(4, Math.toIntExact(entity.getDomicilio().getId()));
             stmn.executeUpdate();
             System.out.println("Persona guardada");
         }catch (SQLException e) {

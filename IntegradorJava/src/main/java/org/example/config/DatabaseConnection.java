@@ -11,6 +11,11 @@ public class DatabaseConnection {
     public static final String PASSWORD="";
 
     public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver"); // Carga explícita del driver
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("No se encontró el driver JDBC de MySQL", e);
+        }
         if(URL== null || URL.isEmpty()||USER==null||USER.isEmpty()||PASSWORD==null){
             throw new SQLException("No se pudo conectar a la base de datos");
         }

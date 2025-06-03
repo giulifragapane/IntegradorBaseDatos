@@ -1,10 +1,13 @@
 package org.example.models;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class Persona {
     private Long id;
     private String nombre;
